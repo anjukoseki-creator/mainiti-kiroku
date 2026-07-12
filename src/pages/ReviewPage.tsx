@@ -4,7 +4,7 @@ import { buildReviewPrompt } from "../lib/reviewPrompt";
 import { runClaudeReview } from "../lib/claude";
 import { addDays, formatShortJa, todayISO } from "../lib/dates";
 import { entryHasContent } from "../lib/streak";
-import { getMascot } from "../mascots";
+import { getMascot, MascotFigure } from "../mascots";
 import type { Review } from "../types";
 
 export function ReviewPage() {
@@ -71,7 +71,10 @@ export function ReviewPage() {
   return (
     <div className="fade-in">
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-        {mascot && <mascot.Svg size={44} />}
+        {mascot && (
+          <MascotFigure mascot={mascot} size={44}
+            totalDays={Object.values(entries).filter(entryHasContent).length} />
+        )}
         <h1 style={{ fontSize: 20 }}>AIレビュー</h1>
       </div>
       <p style={{ color: "var(--text-soft)", fontSize: 13, margin: "0 0 16px" }}>

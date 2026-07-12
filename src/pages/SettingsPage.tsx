@@ -32,7 +32,8 @@ export function SettingsPage() {
       <div className="card">
         <h2 style={{ fontSize: 15 }}>マスコット</h2>
         <p style={{ fontSize: 13, color: "var(--text-soft)", margin: "4px 0 12px" }}>
-          ホームで待っていて、AIレビューもこの子の口調になります
+          ホームで待っていて、AIレビューもこの子の口調になります。
+          記録した日数で育ちます（はじめは赤ちゃん。7日でこども、30日で双葉、100日で花が咲きます）
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           {MASCOTS.map((m) => {

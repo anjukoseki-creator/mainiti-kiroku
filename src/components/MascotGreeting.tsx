@@ -1,5 +1,5 @@
 import { useStore } from "../store";
-import { getMascot, pickLine } from "../mascots";
+import { getMascot, getGrowth, pickLine, MascotFigure } from "../mascots";
 import { calcStreak, entryHasContent } from "../lib/streak";
 import { todayISO } from "../lib/dates";
 
@@ -10,11 +10,18 @@ export function MascotGreeting() {
 
   const today = todayISO();
   const recorded = entryHasContent(entries[today]);
+  const totalDays = Object.values(entries).filter(entryHasContent).length;
+  const growth = getGrowth(totalDays);
   const line = pickLine(mascot, recorded, calcStreak(entries), today);
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 18, margin: "26px 0 4px" }}>
-      <mascot.Svg size={84} />
+      <div style={{ textAlign: "center" }}>
+        <MascotFigure mascot={mascot} size={84} totalDays={totalDays} />
+        <div style={{ fontSize: 11, color: "var(--text-soft)", marginTop: 2 }}>
+          {mascot.name}・{growth.label}
+        </div>
+      </div>
       {/* 吹き出し */}
       <div style={{ position: "relative", flex: 1 }}>
         <div

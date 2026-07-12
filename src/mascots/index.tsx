@@ -158,6 +158,24 @@ function Suzume({ size }: { size?: number }) {
   );
 }
 
+function Pino({ size }: { size?: number }) {
+  return (
+    <Frame size={size}>
+      {/* 小さな丸耳のクリーム色の子（右から4番目） */}
+      <circle cx={32} cy={17} r={7.5} fill="#e3cba4" />
+      <circle cx={68} cy={17} r={7.5} fill="#e3cba4" />
+      <circle cx={32} cy={18} r={4} fill="#f2e3c8" />
+      <circle cx={68} cy={18} r={4} fill="#f2e3c8" />
+      <path d={PEAR} fill="#e9d5b1" />
+      <path d={FLUFF} fill="#faf4e8" />
+      {eye(38, 42)}
+      {eye(62, 42)}
+      <path d="M48 49 L52 49 L50 52 Z" fill="#d8a3ad" />
+      <path d="M45 55 q5 3 10 0" stroke="#c9b491" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    </Frame>
+  );
+}
+
 const NO_BANG = "感嘆符・絵文字・顔文字は一切使わない。静かで淡々とした、短めの文で話す。";
 
 export const MASCOTS: Mascot[] = [
@@ -216,6 +234,15 @@ export const MASCOTS: Mascot[] = [
     persona: `レッサーパンダのマスコット「れっさー」として書く。一人称は「ぼく」。${NO_BANG}マイペースで穏やか。比喩を一つだけ使うことがある。`,
   },
   {
+    id: "pino",
+    name: "ピノ",
+    Svg: Pino,
+    idle: ["…今日の分、まだためてないね", "…あわてなくていい。ためるのは得意", "…まだ空っぽだね。今日のところ"],
+    recorded: ["…今日の分、しまっておいた", "…ちゃんとたまってるよ。すこしずつ", "…見てた。もぐもぐしながら"],
+    milestone: (s) => (s > 0 && s % 7 === 0 ? `…${s}日分、たまった。…えらいと思う` : null),
+    persona: `小さな丸耳のクリーム色のマスコット「ピノ」として書く。一人称は「ぼく」。${NO_BANG}「ためる」「しまう」「積む」という言葉を好み、コツコツ型の努力を一番よろこぶ。`,
+  },
+  {
     id: "suzume",
     name: "すずめ",
     Svg: Suzume,
@@ -229,6 +256,78 @@ export const MASCOTS: Mascot[] = [
 export function getMascot(id?: string): Mascot | null {
   if (id === "none") return null;
   return MASCOTS.find((m) => m.id === id) ?? MASCOTS[1]; // 既定は「しば」
+}
+
+// ---- 成長 ----
+// 記録した合計日数で赤ちゃん→大人に育つ。30日で頭に双葉、100日で花。
+export interface GrowthStage {
+  label: string;
+  scale: number; // 大きさ
+  squash: number; // 赤ちゃんほど縦につぶれて丸い
+}
+
+export function getGrowth(totalDays: number): GrowthStage & { stage: number } {
+  if (totalDays >= 100) return { stage: 3, label: "おとな", scale: 1.22, squash: 1 };
+  if (totalDays >= 30) return { stage: 2, label: "せいちょうき", scale: 1.08, squash: 1 };
+  if (totalDays >= 7) return { stage: 1, label: "こども", scale: 0.9, squash: 0.95 };
+  return { stage: 0, label: "あかちゃん", scale: 0.68, squash: 0.88 };
+}
+
+const Sprout = (
+  <g>
+    <path d="M12 22 C12 17 12 14 12 11" stroke="#5d8a4a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    <path d="M12 12 C6 12 4 7 4 4 C9 4 12 7 12 12 Z" fill="#7aa763" />
+    <path d="M12 12 C18 12 20 7 20 4 C15 4 12 7 12 12 Z" fill="#5d8a4a" />
+  </g>
+);
+
+const Flower = (
+  <g>
+    <path d="M12 22 C12 18 12 16 12 13" stroke="#5d8a4a" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    {[0, 72, 144, 216, 288].map((a) => (
+      <ellipse key={a} cx={12} cy={4.5} rx={3} ry={4.5} fill="#eeb7c4"
+        transform={`rotate(${a} 12 9)`} />
+    ))}
+    <circle cx={12} cy={9} r={2.6} fill="#e8c360" />
+  </g>
+);
+
+// マスコット本体＋成長段階（大きさ・頭の双葉/花）をまとめて描くコンポーネント
+export function MascotFigure({
+  mascot,
+  size,
+  totalDays,
+}: {
+  mascot: Mascot;
+  size: number;
+  totalDays: number;
+}) {
+  const g = getGrowth(totalDays);
+  const s = Math.round(size * g.scale);
+  return (
+    <div
+      title={`${mascot.name}（${g.label}）・いっしょに${totalDays}日`}
+      style={{
+        position: "relative",
+        display: "inline-block",
+        transform: `scaleY(${g.squash})`,
+        transformOrigin: "bottom",
+        flexShrink: 0,
+      }}
+    >
+      {g.stage >= 2 && (
+        <svg
+          width={Math.max(18, s * 0.3)}
+          height={Math.max(18, s * 0.3)}
+          viewBox="0 0 24 24"
+          style={{ position: "absolute", top: -Math.max(10, s * 0.16), left: "50%", transform: "translateX(-50%)" }}
+        >
+          {g.stage === 2 ? Sprout : Flower}
+        </svg>
+      )}
+      <mascot.Svg size={s} />
+    </div>
+  );
 }
 
 // 日付で決まる固定ローテーション（開くたびに変わらない）
