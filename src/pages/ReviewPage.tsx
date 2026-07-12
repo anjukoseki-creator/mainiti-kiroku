@@ -70,7 +70,10 @@ export function ReviewPage() {
 
   return (
     <div className="fade-in">
-      <h1 style={{ fontSize: 20, marginBottom: 4 }}>AIレビュー</h1>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        {mascot && <mascot.Svg size={44} />}
+        <h1 style={{ fontSize: 20 }}>AIレビュー</h1>
+      </div>
       <p style={{ color: "var(--text-soft)", fontSize: 13, margin: "0 0 16px" }}>
         対象期間: {formatShortJa(periodFrom)} 〜 {formatShortJa(today)}（{targetEntries.length}日分）
       </p>

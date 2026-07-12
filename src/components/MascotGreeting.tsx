@@ -1,8 +1,7 @@
 import { useStore } from "../store";
 import { getMascot, pickLine } from "../mascots";
-import { calcStreak } from "../lib/streak";
+import { calcStreak, entryHasContent } from "../lib/streak";
 import { todayISO } from "../lib/dates";
-import { entryHasContent } from "../lib/streak";
 
 export function MascotGreeting() {
   const { entries, settings } = useStore();
@@ -14,11 +13,36 @@ export function MascotGreeting() {
   const line = pickLine(mascot, recorded, calcStreak(entries), today);
 
   return (
-    <div style={{ display: "flex", alignItems: "flex-end", gap: 14, marginTop: 20 }}>
-      <mascot.Svg size={52} />
-      <p style={{ margin: "0 0 6px", fontSize: 13.5, color: "var(--text-soft)", lineHeight: 1.6 }}>
-        {line}
-      </p>
+    <div style={{ display: "flex", alignItems: "center", gap: 18, margin: "26px 0 4px" }}>
+      <mascot.Svg size={84} />
+      {/* 吹き出し */}
+      <div style={{ position: "relative", flex: 1 }}>
+        <div
+          style={{
+            background: "var(--surface)",
+            border: "1px solid var(--border)",
+            borderRadius: 16,
+            padding: "14px 16px",
+            fontSize: 14,
+            lineHeight: 1.7,
+          }}
+        >
+          {line}
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            left: -6,
+            top: "50%",
+            width: 10,
+            height: 10,
+            background: "var(--surface)",
+            borderLeft: "1px solid var(--border)",
+            borderBottom: "1px solid var(--border)",
+            transform: "translateY(-50%) rotate(45deg)",
+          }}
+        />
+      </div>
     </div>
   );
 }
