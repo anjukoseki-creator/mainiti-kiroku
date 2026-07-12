@@ -24,6 +24,7 @@ export interface Review {
 export interface Settings {
   apiKey?: string;
   model: string;
+  mascot?: string; // マスコットID。"none" で非表示
 }
 
 export interface ExportFile {

@@ -1,11 +1,11 @@
 import type { Page } from "../App";
 
-const TABS: { id: Page; label: string; icon: string }[] = [
-  { id: "home", label: "ホーム", icon: "✏️" },
-  { id: "calendar", label: "カレンダー", icon: "📅" },
-  { id: "logs", label: "ログ", icon: "📚" },
-  { id: "review", label: "レビュー", icon: "🌱" },
-  { id: "settings", label: "設定", icon: "⚙️" },
+const TABS: { id: Page; label: string }[] = [
+  { id: "home", label: "今日" },
+  { id: "calendar", label: "カレンダー" },
+  { id: "logs", label: "記録" },
+  { id: "review", label: "レビュー" },
+  { id: "settings", label: "設定" },
 ];
 
 export function Nav({ page, onChange }: { page: Page; onChange: (p: Page) => void }) {
@@ -20,31 +20,32 @@ export function Nav({ page, onChange }: { page: Page; onChange: (p: Page) => voi
         borderTop: "1px solid var(--border)",
         display: "flex",
         justifyContent: "center",
-        gap: 4,
-        padding: "6px 8px calc(6px + env(safe-area-inset-bottom))",
+        gap: 2,
+        padding: "10px 8px calc(10px + env(safe-area-inset-bottom))",
         zIndex: 10,
       }}
     >
-      {TABS.map((t) => (
-        <button
-          key={t.id}
-          onClick={() => onChange(t.id)}
-          style={{
-            background: "transparent",
-            color: page === t.id ? "var(--accent)" : "var(--text-soft)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 0,
-            padding: "6px 12px",
-            fontSize: 11,
-            fontWeight: page === t.id ? 600 : 400,
-          }}
-        >
-          <span style={{ fontSize: 18 }}>{t.icon}</span>
-          {t.label}
-        </button>
-      ))}
+      {TABS.map((t) => {
+        const active = page === t.id;
+        return (
+          <button
+            key={t.id}
+            onClick={() => onChange(t.id)}
+            style={{
+              background: "transparent",
+              color: active ? "var(--accent)" : "var(--text-soft)",
+              padding: "6px 14px",
+              fontSize: 13,
+              fontWeight: active ? 600 : 400,
+              letterSpacing: "0.04em",
+              borderBottom: active ? "2px solid var(--accent)" : "2px solid transparent",
+              borderRadius: 0,
+            }}
+          >
+            {t.label}
+          </button>
+        );
+      })}
     </nav>
   );
 }

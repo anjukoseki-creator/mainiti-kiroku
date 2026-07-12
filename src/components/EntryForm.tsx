@@ -89,7 +89,7 @@ export function EntryForm({ date, initial, onSave }: Props) {
 
       <div style={{ marginTop: 24, display: "flex", alignItems: "center", gap: 12 }}>
         <button onClick={handleSave}>保存</button>
-        {saved && <span style={{ color: "var(--accent)", fontSize: 13 }}>保存しました ✓</span>}
+        {saved && <span style={{ color: "var(--accent)", fontSize: 13 }}>保存しました</span>}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { useStore } from "../store";
 import { downloadExport, importFromJson } from "../lib/storage";
+import { MASCOTS, getMascot } from "../mascots";
 
 export function SettingsPage() {
   const { settings, updateSettings, reload } = useStore();
@@ -29,6 +30,46 @@ export function SettingsPage() {
       <h1 style={{ fontSize: 20, marginBottom: 16 }}>設定</h1>
 
       <div className="card">
+        <h2 style={{ fontSize: 15 }}>マスコット</h2>
+        <p style={{ fontSize: 13, color: "var(--text-soft)", margin: "4px 0 12px" }}>
+          ホームで待っていて、AIレビューもこの子の口調になります
+        </p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+          {MASCOTS.map((m) => {
+            const active = getMascot(settings.mascot)?.id === m.id;
+            return (
+              <button
+                key={m.id}
+                className="ghost"
+                onClick={() => updateSettings({ mascot: m.id })}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "10px 4px",
+                  borderColor: active ? "var(--accent)" : "var(--border)",
+                  background: active ? "var(--accent-soft)" : "transparent",
+                  color: "var(--text)",
+                }}
+              >
+                <m.Svg size={40} />
+                <span style={{ fontSize: 12 }}>{m.name}</span>
+              </button>
+            );
+          })}
+        </div>
+        <button
+          className="ghost"
+          style={{ marginTop: 10, padding: "6px 14px", fontSize: 13,
+            borderColor: settings.mascot === "none" ? "var(--accent)" : "var(--border)" }}
+          onClick={() => updateSettings({ mascot: "none" })}
+        >
+          マスコットなし
+        </button>
+      </div>
+
+      <div className="card" style={{ marginTop: 16 }}>
         <h2 style={{ fontSize: 15 }}>Claude API</h2>
         <p style={{ fontSize: 13, color: "var(--text-soft)", margin: "4px 0 0" }}>
           キーはこの端末の localStorage にのみ保存されます。設定するとAIレビューが自動になります。

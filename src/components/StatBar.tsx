@@ -18,7 +18,7 @@ export function StatBar() {
 
   return (
     <div style={{ color: "var(--text-soft)", fontSize: 13, marginTop: 6 }}>
-      🔥 継続 {streak}日 ・ 直近30日で {recent}日記録
+      継続 {streak}日 ・ 直近30日で {recent}日記録
       <br />
       {reviewNote}
     </div>

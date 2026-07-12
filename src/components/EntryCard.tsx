@@ -26,7 +26,7 @@ export function EntryCard({ entry, showDate = true }: { entry: Entry; showDate?:
         <p style={{ margin: 0, fontSize: 14 }}>
           <span style={{ color: "var(--text-soft)", fontSize: 13 }}>翌日の宣言: </span>
           {entry.tomorrowFocus}
-          {entry.focusDone === true && <span style={{ color: "var(--accent)" }}> ✓達成</span>}
+          {entry.focusDone === true && <span style={{ color: "var(--accent)", fontSize: 13 }}> 達成</span>}
         </p>
       )}
     </div>

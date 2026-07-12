@@ -33,7 +33,7 @@ export function LogsPage() {
       />
       {list.length === 0 ? (
         <p style={{ color: "var(--text-soft)" }}>
-          {query ? "見つかりませんでした" : "まだ記録がありません。今日から始めましょう。"}
+          {query ? "見つかりませんでした" : "まだ記録がありません"}
         </p>
       ) : (
         list.map((e) => <EntryCard key={e.date} entry={e} />)

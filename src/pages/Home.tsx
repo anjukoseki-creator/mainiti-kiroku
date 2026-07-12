@@ -3,6 +3,7 @@ import { useStore } from "../store";
 import { EntryForm } from "../components/EntryForm";
 import { EntryCard } from "../components/EntryCard";
 import { StatBar } from "../components/StatBar";
+import { MascotGreeting } from "../components/MascotGreeting";
 import { addDays, formatJa, todayISO } from "../lib/dates";
 import { entryHasContent } from "../lib/streak";
 
@@ -39,6 +40,7 @@ export function Home() {
     <div className="fade-in">
       <h1 style={{ fontSize: 20 }}>{formatJa(today)}</h1>
       <StatBar />
+      <MascotGreeting />
 
       {yFocus && (
         <div className="card" style={{ marginTop: 20, background: "var(--accent-soft)", border: "none" }}>
@@ -46,10 +48,10 @@ export function Home() {
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12 }}>
             <span>「{yFocus}」</span>
             {yFocusDone ? (
-              <span style={{ color: "var(--accent)", whiteSpace: "nowrap" }}>✓ できた</span>
+              <span style={{ color: "var(--accent)", whiteSpace: "nowrap", fontSize: 13 }}>達成</span>
             ) : (
               <button style={{ padding: "6px 14px", whiteSpace: "nowrap", fontSize: 13 }} onClick={markFocusDone}>
-                できた ✓
+                できた
               </button>
             )}
           </div>
@@ -70,7 +72,7 @@ export function Home() {
         ) : (
           <div style={{ marginTop: 20 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <span style={{ color: "var(--accent)", fontSize: 14 }}>今日は記録済みです ✓</span>
+              <span style={{ color: "var(--text-soft)", fontSize: 14 }}>今日の記録</span>
               <button className="ghost" style={{ padding: "6px 16px", fontSize: 13 }} onClick={() => setEditing(true)}>
                 編集
               </button>

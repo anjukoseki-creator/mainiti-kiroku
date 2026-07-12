@@ -2,7 +2,8 @@ import type { Entry, Review } from "../types";
 
 export function buildReviewPrompt(
   entries: Entry[],
-  previousReview?: Review
+  previousReview?: Review,
+  persona?: string
 ): string {
   const logs = entries
     .map((e) => {
@@ -22,7 +23,9 @@ export function buildReviewPrompt(
     ? `\n# 前回のレビュー（${previousReview.periodTo}まで）\n${previousReview.content}\n`
     : "";
 
-  return `あなたは私専属の成長コーチです。以下は私の日々の成長ログです。
+  const voice = persona ? `\n\n口調の指定: ${persona}分析の中身は妥協せず具体的に。\n` : "";
+
+  return `あなたは私専属の成長コーチです。${voice}以下は私の日々の成長ログです。
 他人との比較ではなく「過去の私」との比較で分析してください。
 単なる要約ではなく、ログの積み重ねからしか見えない変化（努力の質の変化、テーマの移り変わり、インプット/アウトプットのバランスなど）を発見してください。
 励ますだけでなく、具体的な行動につながる指摘をしてください。

@@ -4,6 +4,7 @@ import { buildReviewPrompt } from "../lib/reviewPrompt";
 import { runClaudeReview } from "../lib/claude";
 import { addDays, formatShortJa, todayISO } from "../lib/dates";
 import { entryHasContent } from "../lib/streak";
+import { getMascot } from "../mascots";
 import type { Review } from "../types";
 
 export function ReviewPage() {
@@ -27,9 +28,10 @@ export function ReviewPage() {
     [entries, periodFrom, today]
   );
 
+  const mascot = getMascot(settings.mascot);
   const prompt = useMemo(
-    () => buildReviewPrompt(targetEntries, reviews[0]),
-    [targetEntries, reviews]
+    () => buildReviewPrompt(targetEntries, reviews[0], mascot?.persona),
+    [targetEntries, reviews, mascot]
   );
 
   function saveReview(content: string, source: Review["source"]) {
@@ -75,7 +77,7 @@ export function ReviewPage() {
 
       {tooFew ? (
         <p style={{ color: "var(--text-soft)" }}>
-          レビューには3日分以上の記録が必要です。まずは記録を続けましょう。
+          レビューには3日分以上の記録が必要です
         </p>
       ) : settings.apiKey ? (
         <button onClick={runApi} disabled={loading}>
@@ -87,7 +89,7 @@ export function ReviewPage() {
             APIキー未設定のため、分析プロンプトをコピーして Claude に貼り付けてください。
             （設定画面でAPIキーを入れると自動になります）
           </p>
-          <button onClick={copyPrompt}>{copied ? "コピーしました ✓" : "プロンプトをコピー"}</button>
+          <button onClick={copyPrompt}>{copied ? "コピーしました" : "プロンプトをコピー"}</button>
           {showManual && (
             <div style={{ marginTop: 16 }}>
               <span className="label" style={{ marginTop: 0 }}>Claude の回答を貼り付けて保存</span>
